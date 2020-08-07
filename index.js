@@ -36,6 +36,28 @@ const init = async () => {
         }
     });
 
+
+    // Static Content Serving 
+    await server.register(require('@hapi/inert'));
+
+    server.route({
+        method: 'GET',
+        path: '/about',     // e.g: http://localhost:8000/about
+        handler: function (request, h) {
+
+            return h.file('./public/about.html');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/image',    // e.g: http://localhost:8000/image
+        handler: function (request, h) {
+
+            return h.file('./public/image.png');
+        }
+    });
+
     await server.start();
     console.log('Server running on %s', server.info.uri);
 };
