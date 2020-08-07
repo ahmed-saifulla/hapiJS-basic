@@ -9,6 +9,54 @@ const init = async () => {
         host: 'localhost'
     });
 
+    //Vision Templates
+    server.register(require('@hapi/vision'))
+
+    // Defining engine @ /views dirctory 
+    server.views({
+        engines: {
+            html: require('handlebars')
+        },
+        path: __dirname + '/views'
+    })
+
+    // Using Engines to handle route 
+    server.route({
+        method: 'GET',
+        path: '/viewindex',    // http://localhost:8000/viewindex
+        handler: (request, h) => {
+            return h.view('index');
+        }
+    });
+
+    // with name value passed as 2nd argument
+    server.route({
+        method: 'GET',
+        path: '/viewcontact',   // http://localhost:8000/viewcontact 
+        handler: (request, h) => {
+            return h.view('contact', {
+                username: "Saif"
+            });
+        }
+    });
+
+     // Passing array of tasks and looping
+     server.route({
+        method: 'GET',
+        path: '/viewtasks',   // http://localhost:8000/viewtasks 
+        handler: (request, h) => {
+            return h.view('tasks', {
+                tasks: [
+                    {task : "Eat"},
+                    {task : "Code"},
+                    {task : "Sleep"},
+                    {task : "Repeat"},
+                ]
+            });
+        }
+    });
+
+    // Home Route
     server.route({
         method: 'GET',
         path: '/',
@@ -57,6 +105,8 @@ const init = async () => {
             return h.file('./public/image.png');
         }
     });
+
+
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
